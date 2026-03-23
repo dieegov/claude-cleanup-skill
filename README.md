@@ -2,7 +2,7 @@
 
 > One command. Gigabytes back. Zero risk to your actual files.
 
-Your Mac accumulates **gigabytes** of cache files, stale logs, and leftover junk from browsers, editors, package managers, and apps you forgot you had. This Claude Code skill wipes it all in seconds — safely.
+Your Mac accumulates **gigabytes** of cache junk from browsers, editors, package managers, and apps you forgot you had. This Claude Code skill wipes it all in seconds — safely.
 
 ## What it cleans
 
@@ -12,92 +12,95 @@ Your Mac accumulates **gigabytes** of cache files, stale logs, and leftover junk
 | **Package managers** | npm, npx, pip, Homebrew (old versions + cache) |
 | **Editors** | VS Code, Cursor — cached data, extensions cache, code cache |
 | **AI tools** | Claude Desktop — VM bundles, GPU cache, service workers |
-| **Browsers** | Chrome — service workers, GPU cache, shader cache (never touches bookmarks, history, or extensions) |
+| **Browsers** | Chrome — service workers, GPU/shader cache (never touches bookmarks, history, or extensions) |
 | **Chat apps** | Slack, Discord, Zoom — cache and auto-updater bloat |
 | **Media** | Spotify persistent cache |
 | **Containers** | Docker dangling images and build cache (only if daemon is idle) |
 
-After cleaning, it deep-scans for any remaining space hogs over 500 MB and asks before touching them.
+After cleaning, it deep-scans for remaining space hogs over 500 MB and asks before touching them.
 
 ## What it NEVER touches
-
-This skill has strict safety rails hardcoded in:
 
 - Your files — Documents, Desktop, Downloads, Work, Projects, Code
 - App configs — settings, preferences, profiles, bookmarks
 - App state — Local Storage, IndexedDB, databases
 - Credentials — Keychain, SSH keys, GPG keys, tokens, `.env` files
 - Dev environments — git repos, `node_modules`, nvm versions
-- Anything not on the explicit allow-list — it doesn't improvise
+- Anything not on the explicit allow-list — **it doesn't improvise**
+
+## Example output
+
+```
+📊 Disk before: 42 GB available of 460 GB
+
+🧹 Cleaning...
+
+| Category           | Freed    |
+|--------------------|----------|
+| User Caches        | 3.2 GB   |
+| User Logs          | 180 MB   |
+| npm / npx          | 420 MB   |
+| Homebrew           | 890 MB   |
+| pip                | 65 MB    |
+| VS Code            | 310 MB   |
+| Cursor             | 275 MB   |
+| Claude Desktop     | 140 MB   |
+| Chrome             | 520 MB   |
+| Spotify            | 1.1 GB   |
+| Slack              | 380 MB   |
+| Discord            | 210 MB   |
+| Docker             | 2.4 GB   |
+| System caches      | 450 MB   |
+| .DS_Store files    | 2 MB     |
+
+✅ Total freed: 10.5 GB
+📊 Disk after: 52.5 GB available of 460 GB
+```
 
 ## Install
 
-**Option 1: Copy to your personal skills (recommended)**
-
-```bash
-# Clone the repo
-git clone https://github.com/dancolta/claude-cleanup-skill.git
-
-# Copy to your Claude Code skills directory
-mkdir -p ~/.claude/skills/cleanup
-cp claude-cleanup-skill/SKILL.md ~/.claude/skills/cleanup/SKILL.md
-```
-
-**Option 2: One-liner**
+**One-liner (recommended):**
 
 ```bash
 mkdir -p ~/.claude/skills/cleanup && curl -fsSL https://raw.githubusercontent.com/dancolta/claude-cleanup-skill/main/SKILL.md -o ~/.claude/skills/cleanup/SKILL.md
 ```
 
-**Option 3: Project-level**
+**Or clone:**
 
-Drop the `SKILL.md` into your project's `.claude/skills/cleanup/` directory to share it with your team via git.
+```bash
+git clone https://github.com/dancolta/claude-cleanup-skill.git
+mkdir -p ~/.claude/skills/cleanup
+cp claude-cleanup-skill/SKILL.md ~/.claude/skills/cleanup/SKILL.md
+```
+
+**Or project-level** — drop `SKILL.md` into `.claude/skills/cleanup/` to share with your team via git.
 
 ## Usage
-
-In any Claude Code session, just type:
 
 ```
 /cleanup
 ```
 
-That's it. You'll see:
-1. Current disk usage (before)
-2. Each cleanup category running with bytes freed
-3. Deep scan for remaining large caches
-4. Summary table with total space reclaimed
-
-Typical results: **2–15 GB freed** depending on how long it's been since your last cleanup.
+That's it. Typical results: **2–15 GB freed**.
 
 ## Requirements
 
 - macOS (tested on Sonoma, Sequoia)
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
-- Optional: `sudo` access for system-level caches and DNS flush (skipped gracefully if unavailable)
+- Optional: `sudo` for system-level caches and DNS flush (skipped gracefully if unavailable)
 
 ## Customization
 
-The skill is just a markdown file — fork it and add your own cleanup targets. Some ideas:
-
-- Xcode derived data (`~/Library/Developer/Xcode/DerivedData`)
-- Android Studio caches
-- JetBrains IDE caches
-- Conda package cache
-- Yarn/pnpm cache
-
-Just follow the same pattern: explicit paths, `2>/dev/null` for missing dirs, and add it to the safety rules exclusion list if needed.
+It's just a markdown file — fork and add your own targets (Xcode DerivedData, JetBrains, Android Studio, Conda, Yarn/pnpm). Follow the same pattern: explicit paths, `2>/dev/null`, and add to the safety rules if needed.
 
 ## How it works
 
-Claude Code skills are markdown files that give Claude structured instructions. When you type `/cleanup`, Claude reads the `SKILL.md` and executes the cleanup steps using your terminal — showing you exactly what's happening at each step. No binaries, no background processes, fully transparent.
+Claude Code skills are markdown instructions. When you type `/cleanup`, Claude reads the `SKILL.md` and executes each step in your terminal. No binaries, no background processes, fully transparent.
 
 ## License
 
-MIT — do whatever you want with it.
+MIT
 
 ## Contributing
 
-Found a cache directory worth cleaning? Open a PR. Just make sure it:
-1. Only targets **expendable caches** (things that regenerate automatically)
-2. Never touches user data, configs, or credentials
-3. Includes the directory in the safety rules section if there's any ambiguity
+Found a cache worth cleaning? Open a PR. Rules: only expendable caches, never user data, never configs.
