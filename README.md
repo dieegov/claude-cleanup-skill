@@ -104,3 +104,7 @@ MIT
 ## Contributing
 
 Found a cache worth cleaning? Open a PR. Rules: only expendable caches, never user data, never configs.
+
+---
+
+> Made by [NodeSparks](https://www.nodesparks.com) — [custom AI tools & automations](https://www.nodesparks.com) that replace the SaaS subscriptions eating your team's time.
