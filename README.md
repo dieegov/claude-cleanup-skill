@@ -62,7 +62,7 @@ After cleaning, it deep-scans for remaining space hogs over 500 MB and asks befo
 **One-liner (recommended):**
 
 ```bash
-mkdir -p ~/.claude/skills/cleanup && curl -fsSL https://raw.githubusercontent.com/dancolta/claude-cleanup-skill/main/SKILL.md -o ~/.claude/skills/cleanup/SKILL.md
+mkdir -p ~/.claude/skills/cleanup && curl -fsSL https://raw.githubusercontent.com/dancolta/claude-cleanup-skill/master/SKILL.md -o ~/.claude/skills/cleanup/SKILL.md
 ```
 
 **Or clone:**
